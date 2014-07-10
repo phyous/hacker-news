@@ -1,6 +1,8 @@
 package com.phyous.hackernews.adapter;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +45,27 @@ public class StoryAdapter extends BaseAdapter {
         View view = inflater.inflate(R.layout.adapter_story, parent, false);
 
         Story story = (Story) getItem(position);
-        TextView tv = (TextView) view.findViewById(R.id.story_text);
-        tv.setText(story.title);
+        TextView storyTitle = (TextView) view.findViewById(R.id.story_title);
+        storyTitle.setText(generateTitleText(story));
+        TextView voteCount = (TextView) view.findViewById(R.id.vote_count);
+        voteCount.setText(Integer.toString(story.numPoints));
+        TextView storyAge = (TextView) view.findViewById(R.id.story_age);
+        storyAge.setText(story.ago);
+        TextView storyComments = (TextView) view.findViewById(R.id.story_comments);
+        storyComments.setText(Integer.toString(story.numComments));
 
         return view;
+    }
+
+    private Spanned generateTitleText(Story story) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<b>");
+        sb.append(story.title);
+        sb.append("</b>");
+        sb.append(" <small><font color=\"grey\"> (");
+        sb.append(story.domain);
+        sb.append(")</small></font>");
+        return Html.fromHtml(sb.toString());
     }
 
     public void add(Story object) {
