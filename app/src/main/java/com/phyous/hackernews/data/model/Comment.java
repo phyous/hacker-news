@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
+
+import com.airlocksoftware.database.DbUtils;
 import com.airlocksoftware.database.SqlObject;
 import com.phyous.hackernews.data.UserPrefs;
 
@@ -146,7 +149,6 @@ public class Comment extends SqlObject {
      *
      * @param timestamp
      **/
-    /*
     public static void cacheValues(SQLiteDatabase db, List<Comment> comments, CommentsTimestamp timestamp) {
         // make sure we have a comment to run queries against
         if (comments == null || comments.size() < 1) return;
@@ -184,5 +186,4 @@ public class Comment extends SqlObject {
             comment.create(db);
         }
     }
-    */
 }

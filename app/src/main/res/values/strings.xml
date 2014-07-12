@@ -11,5 +11,7 @@
     <string name="action_settings">Settings</string>
     <string name="content_download_error">Error while trying to contact Hacker news servers</string>
     <string name="link_expired">Link expired</string>
+    <string name="title_activity_comment">Comments</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
