@@ -19,6 +19,10 @@ import com.phyous.hackernews.data.model.Request;
 import com.phyous.hackernews.data.model.Result;
 import com.phyous.hackernews.data.parser.StoryParser.StoryResponse;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 
 public class StoryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<StoryResponse> {
     private Page mPage = Page.FRONT;
@@ -26,6 +30,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     private Result mLastResult = Result.EMPTY;
     private ListView mList;
     private StoryAdapter mAdapter;
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
             Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_story_list, container, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
+        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
 
         return rootView;
     }
@@ -48,6 +54,17 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
 
         mAdapter = new StoryAdapter(getActivity());
         mList.setAdapter(mAdapter);
+
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(new OnRefreshListener() {
+                    @Override
+                    public void onRefreshStarted(View view) {
+                        mRequest = Request.REFRESH;
+                        getLoaderManager().restartLoader(0, null, StoryListFragment.this);
+                    }
+                })
+        .setup(mPullToRefreshLayout);
     }
 
     @Override
@@ -59,6 +76,8 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<StoryResponse> loader, StoryResponse response) {
         mLastResult = response.result;
         Toast msg;
+
+        mPullToRefreshLayout.setRefreshComplete();
 
         switch (mLastResult) {
 

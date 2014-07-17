@@ -21,6 +21,10 @@ import com.phyous.hackernews.data.parser.CommentsParser.CommentsResponse;
 import java.io.Serializable;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 public class CommentListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<CommentsResponse> {
     public static final String STORY = CommentListFragment.class.getSimpleName() + ".story";
@@ -38,6 +42,7 @@ public class CommentListFragment extends Fragment
     private ListView mList;
     private CommentAdapter mAdapter;
     private Request mRequest = Request.NEW;
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     /* Create fragment using this method to ensure arguments are properly passed */
     public static CommentListFragment newInstance(Story story) {
@@ -63,6 +68,7 @@ public class CommentListFragment extends Fragment
             Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_comment_list, container, false);
         mList = (ListView) rootView.findViewById(R.id.comment_list);
+        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
 
         return rootView;
     }
@@ -91,6 +97,17 @@ public class CommentListFragment extends Fragment
 
             if (mTempComments != null) mAdapter.addAll(mTempComments);
         }
+
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(new OnRefreshListener() {
+                    @Override
+                    public void onRefreshStarted(View view) {
+                        mRequest = Request.REFRESH;
+                        getLoaderManager().restartLoader(0, null, CommentListFragment.this);
+                    }
+                })
+        .setup(mPullToRefreshLayout);
     }
 
     @Override
@@ -109,6 +126,8 @@ public class CommentListFragment extends Fragment
     public void onLoadFinished(Loader<CommentsResponse> loader, CommentsResponse response) {
         Story story = response.story;
         mLastResult = response.result;
+
+        mPullToRefreshLayout.setRefreshComplete();
 
         if (response.result == Result.SUCCESS) {
 
