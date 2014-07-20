@@ -14,4 +14,5 @@
     <dimen name="pw_spin_speed">2dp</dimen>
     <dimen name="pw_bar_width">6dp</dimen>
     <dimen name="pw_rim_width">6dp</dimen>
+    <dimen name="btn_width">60dp</dimen>
 </resources>
