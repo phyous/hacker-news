@@ -19,6 +19,8 @@ import com.phyous.hackernews.data.model.Request;
 import com.phyous.hackernews.data.model.Result;
 import com.phyous.hackernews.data.parser.StoryParser.StoryResponse;
 
+import com.todddavies.components.progressbar.ProgressWheel;
+
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -31,6 +33,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     private ListView mList;
     private StoryAdapter mAdapter;
     private PullToRefreshLayout mPullToRefreshLayout;
+    private ProgressWheel mProgressWheel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
         final View rootView = inflater.inflate(R.layout.fragment_story_list, container, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
+        mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.spinner);
 
         return rootView;
     }
@@ -52,6 +56,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        showSpinner();
         mAdapter = new StoryAdapter(getActivity());
         mList.setAdapter(mAdapter);
 
@@ -78,6 +83,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
         Toast msg;
 
         mPullToRefreshLayout.setRefreshComplete();
+        hideSpinner();
 
         switch (mLastResult) {
 
@@ -114,6 +120,16 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<StoryResponse> loader) {
 
+    }
+
+    private void showSpinner() {
+        mProgressWheel.setVisibility(View.VISIBLE);
+        mProgressWheel.spin();
+    }
+
+    private void hideSpinner() {
+        mProgressWheel.setVisibility(View.GONE);
+        mProgressWheel.stopSpinning();
     }
 
     private void checkCacheExpiry(StoryResponse response) {

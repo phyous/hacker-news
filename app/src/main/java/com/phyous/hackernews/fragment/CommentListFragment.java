@@ -17,6 +17,7 @@ import com.phyous.hackernews.data.model.Request;
 import com.phyous.hackernews.data.model.Result;
 import com.phyous.hackernews.data.model.Story;
 import com.phyous.hackernews.data.parser.CommentsParser.CommentsResponse;
+import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CommentListFragment extends Fragment
     private CommentAdapter mAdapter;
     private Request mRequest = Request.NEW;
     private PullToRefreshLayout mPullToRefreshLayout;
+    private ProgressWheel mProgressWheel;
 
     /* Create fragment using this method to ensure arguments are properly passed */
     public static CommentListFragment newInstance(Story story) {
@@ -69,6 +71,7 @@ public class CommentListFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.fragment_comment_list, container, false);
         mList = (ListView) rootView.findViewById(R.id.comment_list);
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
+        mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.spinner);
 
         return rootView;
     }
@@ -85,6 +88,7 @@ public class CommentListFragment extends Fragment
         }
 
         // start loading
+        showSpinner();
         getLoaderManager().initLoader(0, null, this);
 
         // find all the views
@@ -128,6 +132,7 @@ public class CommentListFragment extends Fragment
         mLastResult = response.result;
 
         mPullToRefreshLayout.setRefreshComplete();
+        hideSpinner();
 
         if (response.result == Result.SUCCESS) {
 
@@ -163,6 +168,16 @@ public class CommentListFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<CommentsResponse> loader) {
 
+    }
+
+    private void showSpinner() {
+        mProgressWheel.setVisibility(View.VISIBLE);
+        mProgressWheel.spin();
+    }
+
+    private void hideSpinner() {
+        mProgressWheel.setVisibility(View.GONE);
+        mProgressWheel.stopSpinning();
     }
 
     /** Bind data from mStory to views in mHeader **/
