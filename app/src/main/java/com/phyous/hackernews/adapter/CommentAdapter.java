@@ -20,6 +20,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class CommentAdapter extends BaseAdapter {
+    private class ViewHolder {
+        public Comment comment;
+        public TextView commentDescription, commentText;
+        public LinearLayout depthLayout;
+    }
+
     private Context mContext;
     private List<Comment> mObjects = new ArrayList<Comment>();
 
@@ -44,23 +50,56 @@ public class CommentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.adapter_comment, parent, false);
-
         final Comment comment = (Comment) getItem(position);
-        final TextView commentDescription = (TextView) view.findViewById(R.id.comment_description);
-        commentDescription.setText(formatDescription(comment));
-        final TextView commentText = (TextView) view.findViewById(R.id.comment_text);
-        commentText.setText(formatComment(comment));
+        ViewHolder holder;
 
-        final LinearLayout depthLayout =
-                (LinearLayout) view.findViewById(R.id.comment_depth_layout);
-        for (int i = 0; i < comment.depth; i++) {
-            depthLayout.addView(createCommentDepthLine());
+        if(convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            convertView = inflater.inflate(R.layout.adapter_comment, parent, false);
+
+            holder = createViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        depthLayout.invalidate();
 
-        return view;
+        // Bind data to to ViewHolder views
+        bindViews(holder, comment);
+
+        // Generate nesting layout for comment based on depth
+        generateDepthLayout(holder);
+
+        return convertView;
+    }
+
+    private ViewHolder createViewHolder(View parent) {
+        ViewHolder holder = new ViewHolder();
+        holder.commentDescription = (TextView) parent.findViewById(R.id.comment_description);
+        holder.commentText = (TextView) parent.findViewById(R.id.comment_text);
+        holder.depthLayout = (LinearLayout) parent.findViewById(R.id.comment_depth_layout);
+
+        return holder;
+    }
+
+    private void bindViews(ViewHolder holder, Comment comment) {
+        holder.comment = comment;
+        holder.commentDescription.setText(formatDescription(holder.comment));
+        holder.commentText.setText(formatComment(holder.comment));
+    }
+
+    private void generateDepthLayout(ViewHolder holder) {
+        // Remove child views from layout (if it's recycled)
+        if(holder.depthLayout.getChildCount() > 0) {
+            holder.depthLayout.removeAllViews();
+        }
+
+        // Add appropriate number of bars depending on depth
+        for (int i = 0; i < holder.comment.depth; i++) {
+            holder.depthLayout.addView(createCommentDepthLine());
+        }
+
+        // Invalidate the layout so it's re-drawn
+        holder.depthLayout.invalidate();
     }
 
     private LinearLayout createCommentDepthLine() {

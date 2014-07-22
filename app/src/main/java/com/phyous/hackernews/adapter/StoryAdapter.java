@@ -25,6 +25,12 @@ public class StoryAdapter extends BaseAdapter {
     private Context mContext;
     private List<Story> mObjects = new ArrayList<Story>();
 
+    private class ViewHolder {
+        public Story story;
+        public TextView storyTitle, voteCount, storyAge, storyComments;
+        public RelativeLayout storyInfoLayout, commentsLayout;
+    }
+
     public StoryAdapter(Context context) {
         mContext = context;
     }
@@ -46,45 +52,57 @@ public class StoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.adapter_story, parent, false);
-
         final Story story = (Story) getItem(position);
-        final TextView storyTitle = (TextView) view.findViewById(R.id.story_title);
-        storyTitle.setText(generateTitleText(story));
-        final TextView voteCount = (TextView) view.findViewById(R.id.vote_count);
-        voteCount.setText(Integer.toString(story.numPoints));
-        final TextView storyAge = (TextView) view.findViewById(R.id.story_age);
-        storyAge.setText(story.ago);
-        final TextView storyComments = (TextView) view.findViewById(R.id.story_comments);
-        storyComments.setText(Integer.toString(story.numComments));
+        ViewHolder holder;
 
-        final RelativeLayout storyInfoLayout =
-                (RelativeLayout) view.findViewById(R.id.view_layout);
-        storyInfoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = story.url;
-                if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    url = "http://" + url;
-                }
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(story.url));
-                mContext.startActivity(browserIntent);
-            }
-        });
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            convertView = inflater.inflate(R.layout.adapter_story, parent, false);
 
-        final RelativeLayout commentsLayout =
-                (RelativeLayout) view.findViewById(R.id.story_info_layout);
-        commentsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent commentsIntent = new Intent(mContext, CommentActivity.class);
-                commentsIntent.putExtra(CommentListFragment.STORY, story);
-                mContext.startActivity(commentsIntent);
-            }
-        });
+            // Create ViewHolder for various widgets in this view we care about
+            holder = createViewHolder(convertView);
 
-        return view;
+            // Attach click listeners and tags holding click listener data
+            attachClickListeners(holder);
+            attachTags(convertView, holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        // Bind data to to ViewHolder views
+        bindViews(holder, story);
+
+        return convertView;
+    }
+
+    private ViewHolder createViewHolder(View convertView) {
+        ViewHolder holder = new ViewHolder();
+        holder.storyTitle = (TextView) convertView.findViewById(R.id.story_title);
+        holder.voteCount = (TextView) convertView.findViewById(R.id.vote_count);
+        holder.storyAge = (TextView) convertView.findViewById(R.id.story_age);
+        holder.storyComments = (TextView) convertView.findViewById(R.id.story_comments);
+        holder.storyInfoLayout = (RelativeLayout) convertView.findViewById(R.id.view_layout);
+        holder.commentsLayout = (RelativeLayout) convertView.findViewById(R.id.story_info_layout);
+        return holder;
+    }
+
+    private void bindViews(ViewHolder holder, Story story) {
+        holder.story = story;
+        holder.storyTitle.setText(generateTitleText(holder.story));
+        holder.voteCount.setText(Integer.toString(holder.story.numPoints));
+        holder.storyAge.setText(holder.story.ago);
+        holder.storyComments.setText(Integer.toString(holder.story.numComments));
+    }
+
+    private void attachClickListeners(ViewHolder holder) {
+        holder.storyInfoLayout.setOnClickListener(mStoryClickListener);
+        holder.commentsLayout.setOnClickListener(mCommentsClickListener);
+    }
+
+    private void attachTags(View convertView, ViewHolder holder) {
+        convertView.setTag(holder);
+        holder.storyInfoLayout.setTag(holder);
+        holder.commentsLayout.setTag(holder);
     }
 
     private Spanned generateTitleText(Story story) {
@@ -112,4 +130,25 @@ public class StoryAdapter extends BaseAdapter {
     public List<Story> getArray() {
         return mObjects;
     }
+
+    private View.OnClickListener mStoryClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ViewHolder holder = (ViewHolder) v.getTag();
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(holder.story.url));
+            mContext.startActivity(browserIntent);
+        }
+    };
+
+    private View.OnClickListener mCommentsClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ViewHolder holder = (ViewHolder) v.getTag();
+
+            Intent commentsIntent = new Intent(mContext, CommentActivity.class);
+            commentsIntent.putExtra(CommentListFragment.STORY, holder.story);
+            mContext.startActivity(commentsIntent);
+        }
+    };
 }
