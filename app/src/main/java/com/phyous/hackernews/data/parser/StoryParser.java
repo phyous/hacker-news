@@ -42,7 +42,10 @@ public class StoryParser {
     /** Generate the extension that we're trying to load (goes on the end of ConnectionManager.BASE_URL) **/
     private static String generateUrlExtension(Request request, Page page, String moreFnid) {
         String urlExtension = "/";
-        if (moreFnid != null && request == Request.MORE) urlExtension += moreFnid;
+        if (moreFnid != null && request == Request.MORE) {
+            urlExtension += moreFnid;
+        }
+
         switch (page) {
             case ASK:
                 urlExtension += "ask";

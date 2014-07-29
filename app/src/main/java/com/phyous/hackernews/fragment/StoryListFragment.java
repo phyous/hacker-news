@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,15 +26,17 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-
-public class StoryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<StoryResponse> {
+public class StoryListFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<StoryResponse>, ListView.OnScrollListener{
     private Page mPage = Page.FRONT;
     private Request mRequest = Request.NEW;
     private Result mLastResult = Result.EMPTY;
     private ListView mList;
+    private View mListviewFooter;
     private StoryAdapter mAdapter;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ProgressWheel mProgressWheel;
+    private boolean mUserScrolled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_story_list, container, false);
+        mListviewFooter = inflater.inflate(R.layout.adapter_story_footer, null, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
         mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.spinner);
@@ -58,6 +62,9 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
 
         showSpinner();
         mAdapter = new StoryAdapter(getActivity());
+
+        mList.addFooterView(mListviewFooter);
+        mList.setOnScrollListener(this);
         mList.setAdapter(mAdapter);
 
         ActionBarPullToRefresh.from(getActivity())
@@ -120,6 +127,24 @@ public class StoryListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<StoryResponse> loader) {
 
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+            mUserScrolled = true;
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount && mUserScrolled;
+
+        if (loadMore) {
+            mRequest = Request.MORE;
+            mUserScrolled = false;
+            getLoaderManager().restartLoader(0, null, this);
+        }
     }
 
     private void showSpinner() {

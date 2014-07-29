@@ -19,11 +19,13 @@ import com.phyous.hackernews.fragment.CommentListFragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 public class StoryAdapter extends BaseAdapter {
     private Context mContext;
     private List<Story> mObjects = new ArrayList<Story>();
+    private HashSet<Long> mObjectSet = new HashSet<Long>();
 
     private class ViewHolder {
         public Story story;
@@ -113,17 +115,30 @@ public class StoryAdapter extends BaseAdapter {
     }
 
     public void add(Story object) {
-        mObjects.add(object);
+        conditionalAdd(object);
         notifyDataSetChanged();
     }
 
     public void addAll(Collection<? extends Story> coll) {
-        mObjects.addAll(coll);
+        for(Story story: coll) {
+            conditionalAdd(story);
+        }
+
         notifyDataSetChanged();
+    }
+
+    // We don't want to add stories that already exist, so we keep a record of existing story IDs in
+    // mObjectSet.
+    private void conditionalAdd(Story story) {
+        if (!mObjectSet.contains(story.id)) {
+            mObjects.add(story);
+            mObjectSet.add(story.id);
+        }
     }
 
     public void clear() {
         mObjects.clear();
+        mObjectSet.clear();
         notifyDataSetChanged();
     }
 
