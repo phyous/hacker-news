@@ -24,7 +24,11 @@ import java.util.List;
 
 public class StoryAdapter extends BaseAdapter {
     private Context mContext;
+
+    // Holds stories currently held by the adapter
     private List<Story> mObjects = new ArrayList<Story>();
+
+    // Used to ensure duplicate stories arent added to the list
     private HashSet<Long> mObjectSet = new HashSet<Long>();
 
     private class ViewHolder {

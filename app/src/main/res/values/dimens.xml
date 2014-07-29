@@ -12,7 +12,8 @@
     <dimen name="pw_margin_top">20dp</dimen>
     <dimen name="pw_bar_length">65dp</dimen>
     <dimen name="pw_spin_speed">2dp</dimen>
-    <dimen name="pw_bar_width">6dp</dimen>
-    <dimen name="pw_rim_width">6dp</dimen>
+    <dimen name="pw_bar_width">5dp</dimen>
+    <dimen name="pw_rim_width">5dp</dimen>
+    <dimen name="pw_contour_size">0dp</dimen>
     <dimen name="btn_width">60dp</dimen>
 </resources>

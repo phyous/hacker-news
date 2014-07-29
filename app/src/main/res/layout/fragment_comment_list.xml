@@ -17,6 +17,7 @@
         ProgressWheel:barLength="@dimen/pw_bar_length"
         ProgressWheel:barColor="@color/orange_hn"
         ProgressWheel:spinSpeed="@dimen/pw_spin_speed"
+        ProgressWheel:contourSize="@dimen/pw_contour_size"
         ProgressWheel:barWidth="@dimen/pw_bar_width"
         ProgressWheel:rimWidth="@dimen/pw_rim_width" />
 
