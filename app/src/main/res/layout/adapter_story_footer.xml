@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+    <com.todddavies.components.progressbar.ProgressWheel
+        android:id="@+id/loading_spinner"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        ProgressWheel:rimColor="@color/grey_hn"
+        ProgressWheel:contourColor="@color/grey_hn"
+        ProgressWheel:barLength="65dp"
+        ProgressWheel:barColor="@color/orange_hn"
+        ProgressWheel:spinSpeed="1dp"
+        ProgressWheel:contourSize="@dimen/pw_contour_size"
+        ProgressWheel:barWidth="3dp"
+        ProgressWheel:rimWidth="3dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_toRightOf="@id/loading_spinner"
         android:text="Loading..."/>
+    </RelativeLayout>
 
 </LinearLayout>

@@ -35,7 +35,8 @@ public class StoryListFragment extends Fragment
     private View mListviewFooter;
     private StoryAdapter mAdapter;
     private PullToRefreshLayout mPullToRefreshLayout;
-    private ProgressWheel mProgressWheel;
+    private ProgressWheel mProgressWheelLoading;
+    private ProgressWheel mProgressWheelMore;
     private boolean mUserScrolled = false;
 
     @Override
@@ -51,7 +52,8 @@ public class StoryListFragment extends Fragment
         mListviewFooter = inflater.inflate(R.layout.adapter_story_footer, null, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
-        mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.spinner);
+        mProgressWheelLoading = (ProgressWheel) rootView.findViewById(R.id.spinner);
+        mProgressWheelMore = (ProgressWheel) mListviewFooter.findViewById(R.id.loading_spinner);
 
         return rootView;
     }
@@ -60,7 +62,9 @@ public class StoryListFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        showSpinner();
+        showSpinner(mProgressWheelLoading);
+        hideSpinner(mProgressWheelMore);
+        mListviewFooter.setVisibility(View.GONE);
         mAdapter = new StoryAdapter(getActivity());
 
         mList.addFooterView(mListviewFooter);
@@ -90,7 +94,8 @@ public class StoryListFragment extends Fragment
         Toast msg;
 
         mPullToRefreshLayout.setRefreshComplete();
-        hideSpinner();
+        hideSpinner(mProgressWheelLoading);
+        hideSpinner(mProgressWheelMore);
 
         switch (mLastResult) {
 
@@ -141,20 +146,22 @@ public class StoryListFragment extends Fragment
         boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount && mUserScrolled;
 
         if (loadMore) {
+            showSpinner(mProgressWheelMore);
+            mListviewFooter.setVisibility(View.VISIBLE);
             mRequest = Request.MORE;
             mUserScrolled = false;
             getLoaderManager().restartLoader(0, null, this);
         }
     }
 
-    private void showSpinner() {
-        mProgressWheel.setVisibility(View.VISIBLE);
-        mProgressWheel.spin();
+    private void showSpinner(ProgressWheel wheel) {
+        wheel.setVisibility(View.VISIBLE);
+        wheel.spin();
     }
 
-    private void hideSpinner() {
-        mProgressWheel.setVisibility(View.GONE);
-        mProgressWheel.stopSpinning();
+    private void hideSpinner(ProgressWheel wheel) {
+        wheel.setVisibility(View.GONE);
+        wheel.stopSpinning();
     }
 
     private void checkCacheExpiry(StoryResponse response) {

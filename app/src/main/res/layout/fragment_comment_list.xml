@@ -8,18 +8,18 @@
 
     <com.todddavies.components.progressbar.ProgressWheel
         android:id="@+id/spinner"
-        android:layout_width="@dimen/pw_width"
-        android:layout_height="@dimen/pw_height"
+        android:layout_width="@dimen/pw_large_width"
+        android:layout_height="@dimen/pw_large_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/pw_margin_top"
+        android:layout_marginTop="@dimen/pw_large_margin_top"
         ProgressWheel:rimColor="@color/grey_hn"
         ProgressWheel:contourColor="@color/grey_hn"
-        ProgressWheel:barLength="@dimen/pw_bar_length"
+        ProgressWheel:barLength="@dimen/pw_large_bar_length"
         ProgressWheel:barColor="@color/orange_hn"
-        ProgressWheel:spinSpeed="@dimen/pw_spin_speed"
+        ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed"
         ProgressWheel:contourSize="@dimen/pw_contour_size"
-        ProgressWheel:barWidth="@dimen/pw_bar_width"
-        ProgressWheel:rimWidth="@dimen/pw_rim_width" />
+        ProgressWheel:barWidth="@dimen/pw_large_bar_width"
+        ProgressWheel:rimWidth="@dimen/pw_large_rim_width" />
 
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
         android:id="@+id/ptr_layout"
