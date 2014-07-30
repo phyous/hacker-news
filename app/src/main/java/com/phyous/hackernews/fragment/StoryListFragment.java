@@ -35,7 +35,8 @@ public class StoryListFragment extends Fragment
     private View mListviewFooter;
     private StoryAdapter mAdapter;
     private PullToRefreshLayout mPullToRefreshLayout;
-    private ProgressWheel mProgressWheel;
+    private ProgressWheel mProgressWheelLoading;
+    private ProgressWheel mProgressWheelMore;
     private boolean mUserScrolled = false;
 
     @Override
@@ -51,7 +52,8 @@ public class StoryListFragment extends Fragment
         mListviewFooter = inflater.inflate(R.layout.adapter_story_footer, null, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
-        mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.spinner);
+        mProgressWheelLoading = (ProgressWheel) rootView.findViewById(R.id.spinner);
+        mProgressWheelMore = (ProgressWheel) mListviewFooter.findViewById(R.id.loading_spinner);
 
         return rootView;
     }
@@ -60,11 +62,15 @@ public class StoryListFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        showSpinner();
-        mAdapter = new StoryAdapter(getActivity());
-
+        // Set up spinners & infinite scroll
+        showSpinner(mProgressWheelLoading);
+        hideSpinner(mProgressWheelMore);
+        mListviewFooter.setVisibility(View.GONE);
         mList.addFooterView(mListviewFooter);
         mList.setOnScrollListener(this);
+
+        // Set up adapter
+        mAdapter = new StoryAdapter(getActivity());
         mList.setAdapter(mAdapter);
 
         ActionBarPullToRefresh.from(getActivity())
@@ -89,8 +95,10 @@ public class StoryListFragment extends Fragment
         mLastResult = response.result;
         Toast msg;
 
+        // Complete loading animations
         mPullToRefreshLayout.setRefreshComplete();
-        hideSpinner();
+        hideSpinner(mProgressWheelLoading);
+        hideSpinner(mProgressWheelMore);
 
         switch (mLastResult) {
 
@@ -141,20 +149,27 @@ public class StoryListFragment extends Fragment
         boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount && mUserScrolled;
 
         if (loadMore) {
+            // Start loading animation
+            showSpinner(mProgressWheelMore);
+            mListviewFooter.setVisibility(View.VISIBLE);
+
+            // Grab more data
             mRequest = Request.MORE;
             mUserScrolled = false;
             getLoaderManager().restartLoader(0, null, this);
         }
     }
 
-    private void showSpinner() {
-        mProgressWheel.setVisibility(View.VISIBLE);
-        mProgressWheel.spin();
+    // Make ProgressWheel visible and start spinning animation
+    private void showSpinner(ProgressWheel wheel) {
+        wheel.setVisibility(View.VISIBLE);
+        wheel.spin();
     }
 
-    private void hideSpinner() {
-        mProgressWheel.setVisibility(View.GONE);
-        mProgressWheel.stopSpinning();
+    // Hide ProgressWheel and stop spinning animation
+    private void hideSpinner(ProgressWheel wheel) {
+        wheel.setVisibility(View.GONE);
+        wheel.stopSpinning();
     }
 
     private void checkCacheExpiry(StoryResponse response) {
