@@ -39,10 +39,12 @@ public class StoryListFragment extends Fragment
     private ProgressWheel mProgressWheelMore;
     private boolean mUserScrolled = false;
 
+    private static final int STORY_LOADER_ID = 63531;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(STORY_LOADER_ID, null, this);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class StoryListFragment extends Fragment
                     @Override
                     public void onRefreshStarted(View view) {
                         mRequest = Request.REFRESH;
-                        getLoaderManager().restartLoader(0, null, StoryListFragment.this);
+                        getLoaderManager().restartLoader(STORY_LOADER_ID, null, StoryListFragment.this);
                     }
                 })
         .setup(mPullToRefreshLayout);
@@ -117,7 +119,7 @@ public class StoryListFragment extends Fragment
 
                 // start loader with refresh request
                 mRequest = Request.REFRESH;
-                getLoaderManager().restartLoader(0, null, this);
+                getLoaderManager().restartLoader(STORY_LOADER_ID, null, this);
                 break;
 
             case FAILURE: // Show error message
@@ -130,6 +132,7 @@ public class StoryListFragment extends Fragment
         }
 
         checkCacheExpiry(response);
+        getLoaderManager().destroyLoader(STORY_LOADER_ID);
     }
 
     @Override
@@ -156,7 +159,7 @@ public class StoryListFragment extends Fragment
             // Grab more data
             mRequest = Request.MORE;
             mUserScrolled = false;
-            getLoaderManager().restartLoader(0, null, this);
+            getLoaderManager().restartLoader(STORY_LOADER_ID, null, this);
         }
     }
 
@@ -177,7 +180,7 @@ public class StoryListFragment extends Fragment
                 && System.currentTimeMillis() - response.timestamp.time > Comment.CACHE_EXPIRATION) {
             // still display cached values & need to start refresh
             mRequest = Request.REFRESH;
-            getLoaderManager().restartLoader(0, null, this);
+            getLoaderManager().restartLoader(STORY_LOADER_ID, null, this);
         }
     }
 }
