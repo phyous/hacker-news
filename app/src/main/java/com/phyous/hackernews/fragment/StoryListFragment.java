@@ -1,12 +1,18 @@
 package com.phyous.hackernews.fragment;
 
+import android.animation.LayoutTransition;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,7 +33,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class StoryListFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<StoryResponse>, ListView.OnScrollListener{
+        implements LoaderManager.LoaderCallbacks<StoryResponse>, ListView.OnScrollListener {
     private Page mPage = Page.FRONT;
     private Request mRequest = Request.NEW;
     private Result mLastResult = Result.EMPTY;
@@ -49,7 +55,7 @@ public class StoryListFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_story_list, container, false);
         mListviewFooter = inflater.inflate(R.layout.adapter_story_footer, null, false);
         mList = (ListView) rootView.findViewById(R.id.story_list);
@@ -75,16 +81,40 @@ public class StoryListFragment extends Fragment
         mAdapter = new StoryAdapter(getActivity());
         mList.setAdapter(mAdapter);
 
+        LayoutTransition transition = new LayoutTransition();
+        mList.setLayoutTransition(transition);
+
         ActionBarPullToRefresh.from(getActivity())
                 .allChildrenArePullable()
                 .listener(new OnRefreshListener() {
                     @Override
                     public void onRefreshStarted(View view) {
+                        AlphaAnimation fadeOutAnimator = new AlphaAnimation(mList.getAlpha(), 0.0f);
+                        fadeOutAnimator.setDuration(500);
+                        fadeOutAnimator.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                mList.setAlpha(0f);
+                                showSpinner(mProgressWheelLoading);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        //mList.startAnimation(fadeOutAnimator);
+
                         mRequest = Request.REFRESH;
                         getLoaderManager().restartLoader(STORY_LOADER_ID, null, StoryListFragment.this);
                     }
                 })
-        .setup(mPullToRefreshLayout);
+                .setup(mPullToRefreshLayout);
     }
 
     @Override
@@ -102,11 +132,30 @@ public class StoryListFragment extends Fragment
         hideSpinner(mProgressWheelLoading);
         hideSpinner(mProgressWheelMore);
 
+//        final AlphaAnimation fadeInAnimation = new AlphaAnimation(0, 1.0f);
+//        fadeInAnimation.setDuration(200);
+//        fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                mList.setAlpha(1.0f);
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//        mList.setLayoutAnimation(new LayoutAnimationController(fadeInAnimation));
+
         switch (mLastResult) {
 
             case SUCCESS: // first page
-                mAdapter.clear();
-                mAdapter.addAll(response.stories);
+                mAdapter.replaceAll(response.stories);
                 break;
 
             case MORE: // new data from web
@@ -114,10 +163,6 @@ public class StoryListFragment extends Fragment
                 break;
 
             case FNID_EXPIRED: // the link was expired - refresh the page
-                msg = Toast.makeText(getActivity(), getActivity().getString(R.string.link_expired), Toast.LENGTH_SHORT);
-                msg.show();
-
-                // start loader with refresh request
                 mRequest = Request.REFRESH;
                 getLoaderManager().restartLoader(STORY_LOADER_ID, null, this);
                 break;
@@ -131,7 +176,10 @@ public class StoryListFragment extends Fragment
                 break;
         }
 
+        // If the cache is expired, do a refresh
         checkCacheExpiry(response);
+
+        // Get rid of loader now that we're done with it
         getLoaderManager().destroyLoader(STORY_LOADER_ID);
     }
 
@@ -142,7 +190,7 @@ public class StoryListFragment extends Fragment
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
             mUserScrolled = true;
         }
     }

@@ -123,6 +123,15 @@ public class StoryAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void replaceAll(Collection<? extends Story> coll) {
+        clearObjects();
+        for(Story story: coll) {
+            conditionalAdd(story);
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void addAll(Collection<? extends Story> coll) {
         for(Story story: coll) {
             conditionalAdd(story);
@@ -140,9 +149,13 @@ public class StoryAdapter extends BaseAdapter {
         }
     }
 
-    public void clear() {
+    private void clearObjects() {
         mObjects.clear();
         mObjectSet.clear();
+    }
+
+    public void clear() {
+        clearObjects();
         notifyDataSetChanged();
     }
 

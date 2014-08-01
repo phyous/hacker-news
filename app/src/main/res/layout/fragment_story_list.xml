@@ -6,29 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.todddavies.components.progressbar.ProgressWheel
-        android:id="@+id/spinner"
-        android:layout_width="@dimen/pw_large_width"
-        android:layout_height="@dimen/pw_large_height"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/pw_large_margin_top"
-        ProgressWheel:rimColor="@color/grey_hn"
-        ProgressWheel:contourColor="@color/grey_hn"
-        ProgressWheel:barLength="@dimen/pw_large_bar_length"
-        ProgressWheel:barColor="@color/orange_hn"
-        ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed"
-        ProgressWheel:barWidth="@dimen/pw_large_bar_width"
-        ProgressWheel:rimWidth="@dimen/pw_large_rim_width" />
-
-    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
-        android:id="@+id/ptr_layout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/story_list"
+        <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+            android:id="@+id/ptr_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/story_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+
+        <com.todddavies.components.progressbar.ProgressWheel
+            android:id="@+id/spinner"
+            android:layout_width="@dimen/pw_large_width"
+            android:layout_height="@dimen/pw_large_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/pw_large_margin_top"
+            ProgressWheel:barColor="@color/orange_hn"
+            ProgressWheel:barLength="@dimen/pw_large_bar_length"
+            ProgressWheel:barWidth="@dimen/pw_large_bar_width"
+            ProgressWheel:contourColor="@color/grey_hn"
+            ProgressWheel:rimColor="@color/grey_hn"
+            ProgressWheel:rimWidth="@dimen/pw_large_rim_width"
+            ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed" />
+    </FrameLayout>
 
 </LinearLayout>
