@@ -171,13 +171,13 @@ public class StoryListFragment extends Fragment
         switch (mLastResult) {
 
             case SUCCESS: // first page
-                mPullToRefreshLayout.setRefreshComplete();
                 final long loadingTime = System.currentTimeMillis() - mLoaderStartTime;
                 final long animationDelay = loadingTime > MIN_LOADING_ANIMATION ?
                         0 : MIN_LOADING_ANIMATION - loadingTime;
                 (new Handler()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mPullToRefreshLayout.setRefreshComplete();
                         finishRefreshAnimation();
                         mAdapter.replaceAll(response.stories);
                     }
