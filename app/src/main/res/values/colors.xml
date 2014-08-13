@@ -4,4 +4,8 @@
     <color name="grey_hint_text">#ff969696</color>
     <color name="orange_hn">#f0f08641</color>
     <color name="grey_hn">#828282</color>
+
+    <integer-array name="hn_colors">
+        <item>@color/orange_hn</item>
+    </integer-array>
 </resources>

@@ -2,7 +2,25 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="ptrHeaderStyle">@style/Widget.Custom.PtrHeader</item>
+    </style>
+
+    <!--Pull-to-refresh customization-->
+    <!--More customization options here: https://github.com/chrisbanes/ActionBar-PullToRefresh/wiki/Customisation-->
+    <style name="Widget.Custom.PtrHeader" parent="android:Widget">
+        <!-- Color to tint the progress bar -->
+        <item name="ptrProgressBarColor">@color/orange_hn</item>
+
+        <!-- Style of the Progress Bar. Values are either: inside or outside -->
+        <item name="ptrSmoothProgressBarStyle">@style/Widget.Custom.SmoothProgressBar.HNProgressBar</item>
+    </style>
+
+    <style name="Widget.Custom.SmoothProgressBar.HNProgressBar" parent="SmoothProgressBar">
+        <item name="spb_stroke_separator_length">3dp</item>
+        <item name="spb_sections_count">4</item>
+        <item name="spb_speed">0.7</item>
+        <item name="spb_interpolator">spb_interpolator_linear</item>
+        <item name="spb_colors">@array/hn_colors</item>
     </style>
 
 </resources>
