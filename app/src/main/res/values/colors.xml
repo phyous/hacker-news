@@ -2,6 +2,6 @@
 <resources>
     <color name="black">#000000</color>
     <color name="grey_hint_text">#ff969696</color>
-    <color name="orange_hn">#FF6600</color>
+    <color name="orange_hn">#f0f08641</color>
     <color name="grey_hn">#828282</color>
 </resources>
