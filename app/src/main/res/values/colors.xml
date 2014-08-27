@@ -7,5 +7,6 @@
 
     <integer-array name="hn_colors">
         <item>@color/orange_hn</item>
+        <item>@color/grey_hn</item>
     </integer-array>
 </resources>

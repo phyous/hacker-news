@@ -114,6 +114,7 @@ public class StoryListFragment extends Fragment
         // Pause animations when fragment not visible
         hideSpinner(mProgressWheelLoading);
         hideSpinner(mProgressWheelMore);
+        mPullToRefreshLayout.setRefreshComplete();
     }
 
     private void refreshContent() {

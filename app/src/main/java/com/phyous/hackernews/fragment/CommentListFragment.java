@@ -34,6 +34,8 @@ public class CommentListFragment extends Fragment
 
     private static final long CACHE_EXPIRATION = 1000 * 60 * 5; // 5 minutes
 
+    private static final int COMMENT_LOADER_ID = 63530;
+
     private Story mStory;
 
     /** The backing array of comments stored in onSaveInstanceState and restored in onActivityCreated **/
@@ -62,7 +64,7 @@ public class CommentListFragment extends Fragment
         super.onCreate(savedInstanceState);
         mStory = (Story) getArguments().getSerializable(STORY);
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(COMMENT_LOADER_ID, null, this);
     }
 
     @Override
@@ -89,7 +91,7 @@ public class CommentListFragment extends Fragment
 
         // start loading
         showSpinner();
-        getLoaderManager().initLoader(0, null, this);
+        //getLoaderManager().initLoader(COMMENT_LOADER_ID, null, this);
 
         // find all the views
         //findViews(savedInstanceState);
@@ -108,7 +110,7 @@ public class CommentListFragment extends Fragment
                     @Override
                     public void onRefreshStarted(View view) {
                         mRequest = Request.REFRESH;
-                        getLoaderManager().restartLoader(0, null, CommentListFragment.this);
+                        getLoaderManager().restartLoader(COMMENT_LOADER_ID, null, CommentListFragment.this);
                     }
                 })
         .setup(mPullToRefreshLayout);
@@ -156,13 +158,16 @@ public class CommentListFragment extends Fragment
             if (System.currentTimeMillis() - response.timestamp.time > CACHE_EXPIRATION) {
                 // still show stuff, but restart loading
                 mRequest = Request.REFRESH;
-                getLoaderManager().restartLoader(0, null, this);
+                getLoaderManager().restartLoader(COMMENT_LOADER_ID, null, this);
             }
 
             // setup story header
             mStory = story;
             bindStoryHeader();
         }
+
+        // Get rid of loader now that we're done with it
+        getLoaderManager().destroyLoader(COMMENT_LOADER_ID);
     }
 
     @Override

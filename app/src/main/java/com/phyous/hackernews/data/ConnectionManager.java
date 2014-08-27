@@ -4,7 +4,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 /**
- * Static methods for connecting to the http://news.ycombinator.com *
+ * Static methods for connecting to http://news.ycombinator.com *
  */
 public class ConnectionManager {
     public static final String TAG = ConnectionManager.class.getSimpleName();

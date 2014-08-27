@@ -22,7 +22,7 @@
     <!--Small spinner parameters-->
     <dimen name="pw_small_bar_width">2dp</dimen>
     <dimen name="pw_small_rim_width">2dp</dimen>
-    <dimen name="pw_small_spin_speed">1dp</dimen>
+    <dimen name="pw_small_spin_speed">2dp</dimen>
     <dimen name="pw_small_bar_length">65dp</dimen>
     <dimen name="pw_small_height">20dp</dimen>
     <dimen name="pw_small_width">20dp</dimen>

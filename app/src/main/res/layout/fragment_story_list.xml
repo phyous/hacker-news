@@ -20,20 +20,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.todddavies.components.progressbar.ProgressWheel
-                android:id="@+id/spinner"
-                android:layout_width="@dimen/pw_large_width"
-                android:layout_height="@dimen/pw_large_height"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/pw_large_margin_top"
-                ProgressWheel:barColor="@color/orange_hn"
-                ProgressWheel:barLength="@dimen/pw_large_bar_length"
-                ProgressWheel:barWidth="@dimen/pw_large_bar_width"
-                ProgressWheel:contourColor="@color/grey_hn"
-                ProgressWheel:rimColor="@color/grey_hn"
-                ProgressWheel:rimWidth="@dimen/pw_large_rim_width"
-                ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed" />
         </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+
+        <com.todddavies.components.progressbar.ProgressWheel
+            android:id="@+id/spinner"
+            android:layout_width="@dimen/pw_large_width"
+            android:layout_height="@dimen/pw_large_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/pw_large_margin_top"
+            ProgressWheel:barColor="@color/orange_hn"
+            ProgressWheel:barLength="@dimen/pw_large_bar_length"
+            ProgressWheel:barWidth="@dimen/pw_large_bar_width"
+            ProgressWheel:contourColor="@color/grey_hn"
+            ProgressWheel:rimColor="@color/grey_hn"
+            ProgressWheel:rimWidth="@dimen/pw_large_rim_width"
+            ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed" />
     </FrameLayout>
 
 </LinearLayout>
