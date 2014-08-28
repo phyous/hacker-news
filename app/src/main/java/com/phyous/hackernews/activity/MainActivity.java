@@ -3,6 +3,7 @@ package com.phyous.hackernews.activity;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,8 +46,16 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+
+        String tag = StoryListFragment.TAG;
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+
+        if(fragment == null) {
+            fragment = new StoryListFragment();
+        }
+
         fragmentManager.beginTransaction()
-                .replace(R.id.container, new StoryListFragment())
+                .replace(R.id.container, fragment, tag)
                 .commit();
     }
 

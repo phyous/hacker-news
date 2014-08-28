@@ -30,7 +30,7 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class StoryListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<StoryResponse>, ListView.OnScrollListener {
-    private static final String TAG = StoryListFragment.class.getSimpleName();
+    public static final String TAG = StoryListFragment.class.getSimpleName();
 
     private Page mPage = Page.FRONT;
     private Request mRequest = Request.NEW;
