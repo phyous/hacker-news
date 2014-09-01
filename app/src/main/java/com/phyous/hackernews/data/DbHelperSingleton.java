@@ -8,6 +8,7 @@ import com.phyous.hackernews.data.model.Comment;
 import com.phyous.hackernews.data.model.CommentsTimestamp;
 import com.phyous.hackernews.data.model.Story;
 import com.phyous.hackernews.data.model.StoryTimestamp;
+import com.phyous.hackernews.data.model.Vote;
 
 /**
  * SQLiteOpenHelper singleton. Should be ok that the database is never closed as per:
@@ -33,6 +34,13 @@ public class DbHelperSingleton extends SQLiteOpenHelper {
         return mInstance;
     }
 
+    public static void clearCaches(SQLiteDatabase db) {
+        db.delete(new Story().getTableName(), null, null);
+        db.delete(new Comment().getTableName(), null, null);
+        db.delete(new StoryTimestamp().getTableName(), null, null);
+        db.delete(new Vote().getTableName(), null, null);
+    }
+
     /**
      * constructor should be private to prevent direct instantiation.
      * make call to static factory method "getInstance()" instead.
@@ -47,7 +55,7 @@ public class DbHelperSingleton extends SQLiteOpenHelper {
         new StoryTimestamp().createTable(db);
         new Comment().createTable(db);
         new CommentsTimestamp().createTable(db);
-//        new Vote().createTable(db);
+        new Vote().createTable(db);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class DbHelperSingleton extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + new StoryTimestamp().getTableName());
         db.execSQL("DROP TABLE IF EXISTS " + new Comment().getTableName());
         db.execSQL("DROP TABLE IF EXISTS " + new CommentsTimestamp().getTableName());
-//        db.execSQL("DROP TABLE IF EXISTS " + new Vote().getTableName());
+        db.execSQL("DROP TABLE IF EXISTS " + new Vote().getTableName());
 
         onCreate(db);
     }

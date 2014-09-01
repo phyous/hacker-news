@@ -2,16 +2,30 @@
 <resources>
 
     <string name="app_name">Hacker News</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
+
+    <!--Main activity section titles-->
+    <string name="title_section_front_page">Front Page</string>
+    <string name="title_section_login">Login</string>
     <string name="title_section3">Section 3</string>
+
+    <!--Activity titles-->
+    <string name="title_activity_comment">Comments</string>
+    <string name="title_activity_login">Login</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="content_download_error">Error while trying to contact Hacker news servers</string>
     <string name="link_expired">Link expired</string>
-    <string name="title_activity_comment">Comments</string>
+
     <string name="hello_world">Hello world!</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="log_in">Log In</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ycombinator_logo_text">Y</string>
+    <string name="login_success">Login complete</string>
+    <string name="login_failure">Login error. Please check username/password and try again.</string>
 
 </resources>

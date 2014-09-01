@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/orange_hn"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="30dp">
+
+        <TextView
+            android:id="@+id/logo_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="@string/ycombinator_logo_text"
+            android:textSize="60sp" />
+
+        <com.todddavies.components.progressbar.ProgressWheel
+            android:id="@+id/spinner"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_gravity="bottom"
+            ProgressWheel:barColor="@color/white"
+            ProgressWheel:barLength="54dp"
+            ProgressWheel:barWidth="@dimen/pw_large_bar_width"
+            ProgressWheel:contourColor="@color/grey_hn"
+            ProgressWheel:rimColor="@color/grey_hn"
+            ProgressWheel:rimWidth="@dimen/pw_large_rim_width"
+            ProgressWheel:spinSpeed="@dimen/pw_large_spin_speed" />
+
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="@dimen/login_margin"
+        android:layout_marginRight="@dimen/login_margin"
+        android:padding="6dp"
+        android:background="@drawable/rounded_box"
+        android:hint="@string/username"
+        android:inputType="textNoSuggestions"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="@dimen/login_margin"
+        android:layout_marginRight="@dimen/login_margin"
+        android:padding="6dp"
+        android:background="@drawable/rounded_box"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="@dimen/login_margin"
+        android:layout_marginRight="@dimen/login_margin"
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_box"
+        android:text="@string/log_in"
+        />
+
+</LinearLayout>

@@ -57,6 +57,13 @@ public class StoryListFragment extends Fragment
     // Minimum time which the loader will display (so UI doesn't flicker during quick load times)
     private static final long MIN_LOADING_ANIMATION = 1500;
 
+    public static StoryListFragment newInstance() {
+        return new StoryListFragment();
+    }
+
+    public StoryListFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +115,8 @@ public class StoryListFragment extends Fragment
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
 
         // Pause animations when fragment not visible
         hideSpinner(mProgressWheelLoading);

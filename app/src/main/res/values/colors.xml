@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
     <color name="grey_hint_text">#ff969696</color>
     <color name="orange_hn">#f0f08641</color>
     <color name="grey_hn">#828282</color>
+
+    <!--Grey button colors-->
+    <color name="grey_button">#828282</color>
+    <color name="grey_button_pressed">#ff626262</color>
 
     <integer-array name="hn_colors">
         <item>@color/orange_hn</item>

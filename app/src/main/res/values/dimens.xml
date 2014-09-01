@@ -26,4 +26,8 @@
     <dimen name="pw_small_bar_length">65dp</dimen>
     <dimen name="pw_small_height">20dp</dimen>
     <dimen name="pw_small_width">20dp</dimen>
+
+    <!--Login Activity parameters-->
+    <dimen name="login_margin">24dp</dimen>
+
 </resources>

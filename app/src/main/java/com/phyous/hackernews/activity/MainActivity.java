@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,28 +45,37 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
+        if(position == 1) startLoginActivity();
+        else {
 
-        String tag = StoryListFragment.TAG;
-        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+            // update the main content by replacing fragments
+            FragmentManager fragmentManager = getFragmentManager();
 
-        if(fragment == null) {
-            fragment = new StoryListFragment();
+            String tag = StoryListFragment.TAG;
+            Fragment fragment = fragmentManager.findFragmentByTag(tag);
+
+            if (fragment == null) {
+                fragment = new StoryListFragment();
+            }
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .commit();
         }
+    }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, tag)
-                .commit();
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_section_front_page);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_section_login);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
