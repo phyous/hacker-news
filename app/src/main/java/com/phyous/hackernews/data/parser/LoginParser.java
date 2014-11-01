@@ -9,7 +9,7 @@ import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
 
 public class LoginParser {
-    private static final String LOGIN_URL_EXTENSION = "/newslogin?whence=news";
+    private static final String LOGIN_URL_EXTENSION = "/login";
 
     public static class LoginResponse {
         public LoginResponse() {
@@ -29,17 +29,9 @@ public class LoginParser {
      **/
     public static String login(String username, String password) {
         try {
-            Response loginResponse = ConnectionManager.anonConnect(LOGIN_URL_EXTENSION)
-                    .method(Method.GET)
-                    .execute();
-            Document loginPage = loginResponse.parse();
-            String fnid = loginPage.select("input[name=fnid]")
-                    .attr("value");
-
-            Response response = ConnectionManager.anonConnect("/y")
-                    .data("fnid", fnid)
-                    .data("u", username)
-                    .data("p", password)
+            Response response = ConnectionManager.anonConnect(LOGIN_URL_EXTENSION)
+                    .data("acct", username)
+                    .data("pw", password)
                     .header("Origin", ConnectionManager.BASE_URL)
                     .followRedirects(true)
                     .referrer(ConnectionManager.BASE_URL + LOGIN_URL_EXTENSION)
