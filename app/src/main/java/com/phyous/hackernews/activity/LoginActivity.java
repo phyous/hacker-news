@@ -26,6 +26,8 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     public static final String USERNAME = TAG + ".username";
     public static final String PASSWORD = TAG + ".password";
 
+    private static final int LOGIN_LOADER_ID = 63529;
+
     private String mUsername = null;
     private String mPassword = null;
     private EditText mEditUsername;
@@ -50,8 +52,6 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         initializeUiState();
 
         restoreSavedState(savedInstanceState);
-
-        getLoaderManager().initLoader(0, null, this);
     }
 
     private void findViews() {
@@ -149,6 +149,9 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
             Toast t = Toast.makeText(this, getString(R.string.login_failure), Toast.LENGTH_LONG);
             t.show();
         }
+
+        // Get rid of loader now that we're done with it
+        getLoaderManager().destroyLoader(LOGIN_LOADER_ID);
     }
 
     @Override
@@ -161,7 +164,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
 
         showLoadingAnimation();
 
-        getLoaderManager().restartLoader(0, null, this);
+        getLoaderManager().restartLoader(LOGIN_LOADER_ID, null, this);
     }
 
     private void doPostAction() {
